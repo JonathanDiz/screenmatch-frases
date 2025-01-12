@@ -21,6 +21,17 @@ public class FraseController {
         this.fraseService = fraseService;
     }
 
+    // Asegúrate de que el endpoint para obtener una frase aleatoria esté definido correctamente
+    @GetMapping("/random")
+    public ResponseEntity<Frase> obtenerFraseAleatoria(){
+        Frase frase = fraseService.obtenerFraseAleatoria();
+        if (frase != null) {
+            return ResponseEntity.ok(frase);
+        } else {
+            return ResponseEntity.noContent().build(); // Manejar el caso cuando no hay frases disponibles
+        }
+    }
+
     @GetMapping
     public List<Frase> obtenerFrases() {
         return fraseService.getAllFrases();
@@ -33,14 +44,15 @@ public class FraseController {
     }
 
     @PostMapping
-    public Frase createFrase(@RequestBody Frase frase) {
-        return fraseService.saveFrase(frase);
+    public ResponseEntity<Frase> createFrase(@RequestBody Frase frase) {
+        Frase createdFrase = fraseService.saveFrase(frase);
+        return ResponseEntity.ok(createdFrase);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Frase> updateFrase(@PathVariable Long id, @RequestBody Frase frase) {
-        Frase updatedFrase = fraseService.updateFrase(id, frase);
-        return updatedFrase != null ? ResponseEntity.ok(updatedFrase) : ResponseEntity.notFound().build();
+        Optional<Frase> updatedFrase = fraseService.updateFrase(id, frase);
+        return updatedFrase.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")

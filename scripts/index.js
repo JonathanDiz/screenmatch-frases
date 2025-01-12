@@ -1,27 +1,26 @@
-import getDatos from "./getDatos.js";
+import getDatos from './getDatos.js';
 
-const btnSortear = document.querySelector('.btn-sortear');
-const fichaDescripcion = document.getElementById('ficha-descripcion');
+document.addEventListener("DOMContentLoaded", function() {
+    function cargarInfoSerie() {
+        getDatos('/random')
+            .then(data => {
+                if (data) {
+                    const contenedor = document.getElementById('ficha-descripcion');
+                    contenedor.innerHTML = `
+                        <img src="${data.poster}" alt="Poster">
+                        <h2>${data.titulo}</h2>
+                        <p>${data.frase}</p>
+                        <p><strong>Personaje:</strong> ${data.personaje}</p>
+                    `;
+                } else {
+                    console.error("Datos no encontrados");
+                }
+            })
+            .catch(error => {
+                console.error("Error al obtener las informaciones de la serie:", error);
+            });
+    }
 
-function cargarInfoSerie() {
-  getDatos(`/series/frases`)
-      .then(data => {
-        fichaDescripcion.innerHTML = `
-              <img src="${data.poster}" alt="${data.titulo}" />
-              <div>
-                  <h2>${data.titulo}</h2>
-                  <div class="descripcion-texto">
-                      <p><i>"${data.frase}"</i></p>
-                      <p><b>Citado por:</b> ${data.personaje}</p>
-                  </div>
-              </div>
-          `;
-      })
-      .catch(error => {
-          console.error('Error al obtener las informaciones de la serie:', error);
-      });
-}
-
-
-window.onload = cargarInfoSerie();
-btnSortear.addEventListener('click', cargarInfoSerie);
+    // Llama a la función para cargar la información de la serie
+    cargarInfoSerie();
+});

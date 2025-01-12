@@ -21,6 +21,10 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
-    // Llama a la función para cargar la información de la serie
+    // Llama a la función para cargar la información de la serie cuando se carga la página
     cargarInfoSerie();
+
+    // Añade el evento de clic al botón
+    const btnSortear = document.querySelector(".btn-sortear");
+    btnSortear.addEventListener("click", cargarInfoSerie);
 });

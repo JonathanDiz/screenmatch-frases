@@ -1,0 +1,17 @@
+# Usa una imagen base de OpenJDK 17
+FROM openjdk:17-jdk-slim
+
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Copia los archivos de Maven y el código fuente al contenedor
+COPY . .
+
+# Construye la aplicación
+RUN ./mvnw package
+
+# Expone el puerto 8080
+EXPOSE 8080
+
+# Comando para ejecutar la aplicación
+CMD ["java", "-jar", "target/tu-aplicacion.jar"]
